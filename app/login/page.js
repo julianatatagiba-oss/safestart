@@ -11,9 +11,12 @@ export default function Login() {
           <label className="block text-gray-600 mb-1">Contraseña</label>
           <input type="password" placeholder="••••••••" className="w-full border border-gray-300 rounded-lg px-4 py-2"/>
         </div>
-        <button className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg hover:bg-blue-700">
+        <a
+          href="/dashboard"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg hover:bg-blue-700 block text-center"
+        >
           Registrarse
-        </button>
+        </a>
         <p className="text-center text-gray-500 mt-4">
           ¿Ya tienes cuenta?{" "}
           <span className="text-blue-600 cursor-pointer hover:underline">Inicia sesión</span>
