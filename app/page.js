@@ -14,7 +14,7 @@ export default function Home() {
         >
           Empezar gratis →
         </a>
-        <p className="text-blue-200 mt-4 text-sm">Sin tarjeta de crédito · Gratis para siempre</p>
+        <p className="text-blue-200 mt-4 text-sm">Recomendado por colegios y AMPAs</p>
       </div>
     </main>
   )
