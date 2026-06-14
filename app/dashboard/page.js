@@ -2,7 +2,8 @@ export default function Dashboard() {
     return (
       <main className="min-h-screen bg-blue-50 p-8">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-blue-600 mb-2">Hola, mamá/papá 👋</h1>
+          <h1 className="text-3xl font-bold text-blue-600 mb-2">Bienvenida, Carlos 👋</h1>
+=======
           <p className="text-gray-600 mb-8">Gestiona la seguridad digital de tu familia</p>
   
           <div className="bg-white rounded-xl shadow-md p-6 mb-6">
