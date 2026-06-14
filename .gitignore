@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Documentación de producto (privada)
+context/
+product/
+agents/
+skills/
+templates/
+outputs/
+CLAUDE.md
+README.md
