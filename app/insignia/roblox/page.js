@@ -1,51 +1,119 @@
 "use client"
+import { Suspense } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { motion } from "motion/react"
+import { ChevronRight } from "lucide-react"
+import { AppIcon } from "@/components/AppIcon"
 
-export default function InsigniaRoblox({ searchParams }) {
-  const nombre = searchParams?.nombre || "Tu amigo"
+function InsigniaContent() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const nombre = searchParams.get("nombre") || "Tu amigo"
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-orange-400 to-red-500 flex flex-col items-center justify-center p-6">
-      <div className="max-w-sm w-full">
+    <div className="min-h-screen bg-gradient-to-b from-[#7C3AED] to-[#4c1d95] font-[Inter,sans-serif] flex flex-col items-center justify-center px-5 py-12">
+      <div className="max-w-sm w-full text-center">
 
-        {/* Badge card */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 text-center mb-6">
-          <p className="text-gray-400 text-sm mb-4">
-            <span className="font-semibold text-gray-600">{nombre}</span> ha conseguido
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-2 mb-10">
+          <AppIcon size={28} />
+          <span className="font-black text-white">SafeStart</span>
+        </div>
+
+        {/* Anuncio */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6"
+        >
+          <div className="w-20 h-20 rounded-full bg-yellow-400 flex items-center justify-center text-4xl mx-auto mb-4 shadow-xl shadow-purple-900/40">
+            ⭐
+          </div>
+          <p className="text-purple-200 text-sm font-medium">
+            <span className="text-white font-black text-lg">{nombre}</span> acaba de desbloquear un nuevo logro
           </p>
+        </motion.div>
 
-          <div className="text-7xl mb-4">🏅</div>
-          <h1 className="text-2xl font-black text-gray-800 mb-1">Explorador Seguro</h1>
-          <p className="text-red-500 font-bold mb-6">Roblox · Nivel 1</p>
+        {/* Badge */}
+        <motion.div
+          initial={{ scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", duration: 0.7, delay: 0.2 }}
+          className="relative mx-auto w-44 h-44 mb-8"
+        >
+          <div className="w-44 h-44 rounded-full bg-gradient-to-br from-[#F59E0B] to-amber-600 flex flex-col items-center justify-center shadow-2xl shadow-purple-900/60">
+            <div className="text-5xl mb-1">🏆</div>
+            <div className="text-white font-black text-xs tracking-widest uppercase">Roblox Pro</div>
+          </div>
+          <motion.div
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="absolute inset-0 rounded-full border-4 border-[#F59E0B]/30"
+          />
+        </motion.div>
 
-          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 text-left">
-            <p className="text-xs font-bold text-yellow-600 uppercase tracking-wide mb-2">
-              🔓 Un dato que {nombre} ya sabe
-            </p>
-            <p className="text-sm text-gray-700">
-              El lenguaje de programación de Roblox se llama Lua — el mismo que usan algunos videojuegos AAA profesionales.
-            </p>
+        {/* Mensaje */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <h1 className="text-2xl font-black text-white mb-2">
+            ¡{nombre} es experto/a en Roblox!
+          </h1>
+          <p className="text-purple-200 text-sm leading-relaxed mb-2">
+            Ha completado el reto de seguridad digital de Roblox en SafeStart y ha aprendido a protegerse online.
+          </p>
+          <div className="flex justify-center gap-1 mb-8">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 + i * 0.08, type: "spring" }}
+                className="text-[#F59E0B] text-2xl"
+              >
+                ⭐
+              </motion.span>
+            ))}
           </div>
 
-          <p className="text-xs text-gray-400 mt-4">
-            + 2 datos más desbloqueados que tú aún no conoces
-          </p>
-        </div>
+          {/* CTA */}
+          <div className="bg-white/10 rounded-3xl p-5 mb-5">
+            <p className="text-white font-black text-base mb-1">
+              ¿Quieres ganar tu propio logro?
+            </p>
+            <p className="text-purple-200 text-sm mb-4">
+              Pídele a tu padre o madre que te registre en SafeStart. ¡Es gratis!
+            </p>
+            <button
+              onClick={() => router.push("/")}
+              className="w-full bg-[#F59E0B] text-white font-black py-4 rounded-2xl hover:bg-amber-500 transition-colors shadow-xl shadow-amber-900/30 flex items-center justify-center gap-2 text-base"
+            >
+              ¡Quiero la mía!
+              <ChevronRight size={20} />
+            </button>
+          </div>
 
-        {/* CTA */}
-        <div className="text-center">
-          <p className="text-white font-semibold mb-3">¿Quieres conseguir la tuya?</p>
-          <a
-            href="/"
-            className="block w-full bg-white text-red-500 font-black py-4 rounded-2xl text-lg hover:bg-red-50 active:scale-95 transition-transform"
-          >
-            Consigue tu insignia →
-          </a>
-          <p className="text-orange-200 text-xs mt-3">
-            Gratis · Solo necesitas que tu padre te registre
+          <p className="text-purple-400 text-xs">
+            safestart.app · Tu coach digital familiar
           </p>
-        </div>
+        </motion.div>
 
       </div>
-    </main>
+    </div>
+  )
+}
+
+export default function InsigniaRoblox() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-[#7C3AED] to-[#4c1d95] flex items-center justify-center">
+        <div className="text-white text-lg font-black">Cargando...</div>
+      </div>
+    }>
+      <InsigniaContent />
+    </Suspense>
   )
 }
