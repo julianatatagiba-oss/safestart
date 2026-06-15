@@ -53,6 +53,7 @@ export default function RetoRoblox() {
   const [indice, setIndice] = useState(0)
   const [seleccion, setSeleccion] = useState(null)
   const [aciertos, setAciertos] = useState(0)
+  const [indicesAcertados, setIndicesAcertados] = useState([])
   const [copiado, setCopiado] = useState(false)
 
   function compartir() {
@@ -69,7 +70,10 @@ export default function RetoRoblox() {
   function elegir(opcion, i) {
     if (seleccion !== null) return
     setSeleccion(i)
-    if (opcion.correcto) setAciertos(a => a + 1)
+    if (opcion.correcto) {
+      setAciertos(a => a + 1)
+      setIndicesAcertados(prev => [...prev, indice])
+    }
     setEstado(ESTADOS.FEEDBACK)
   }
 
@@ -80,8 +84,10 @@ export default function RetoRoblox() {
       setEstado(ESTADOS.PREGUNTA)
     } else {
       const saved = JSON.parse(localStorage.getItem("retosCompletados") || "{}")
-      const finalAciertos = aciertos + (ESCENARIOS[indice].opciones[seleccion].correcto ? 1 : 0)
-      saved.roblox = { completado: true, aciertos: finalAciertos, total: ESCENARIOS.length }
+      const esCorrecta = ESCENARIOS[indice].opciones[seleccion].correcto
+      const finalAciertos = aciertos + (esCorrecta ? 1 : 0)
+      const finalIndices = esCorrecta ? [...indicesAcertados, indice] : indicesAcertados
+      saved.roblox = { completado: true, aciertos: finalAciertos, total: ESCENARIOS.length, tipsDesbloqueados: finalIndices }
       localStorage.setItem("retosCompletados", JSON.stringify(saved))
       setEstado(ESTADOS.INSIGNIA)
     }

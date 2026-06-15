@@ -135,12 +135,16 @@ export default function ProgresoHijo() {
                     {reto.tips.length > 0 && (
                       <div className="border-t pt-3 space-y-2">
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Lo que ha aprendido</p>
-                        {reto.tips.map((tip, i) => (
-                          <div key={i} className="flex gap-2 text-sm text-gray-600">
-                            <span className="text-yellow-500 shrink-0">💡</span>
-                            <p>{tip}</p>
-                          </div>
-                        ))}
+                        {data?.tipsDesbloqueados?.length > 0 ? (
+                          data.tipsDesbloqueados.map((idx) => (
+                            <div key={idx} className="flex gap-2 text-sm text-gray-600">
+                              <span className="text-yellow-500 shrink-0">💡</span>
+                              <p>{reto.tips[idx]}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-gray-400">No desbloqueó ningún dato en este reto</p>
+                        )}
                       </div>
                     )}
                   </>
