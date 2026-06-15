@@ -31,7 +31,17 @@ export default function BienvenidaHijo() {
 
         <div className="text-6xl mb-4">👋</div>
         <h1 className="text-3xl font-bold text-purple-600 mb-2">¡Hola, {nombre}!</h1>
-        <p className="text-gray-500 mb-8">Tu padre te ha invitado a SafeStart. Vamos a personalizar tu espacio.</p>
+        <p className="text-gray-500 mb-6">Tu padre te ha invitado a SafeStart. Vamos a crear tu espacio.</p>
+
+        <div className="bg-purple-50 rounded-2xl p-6 mb-8 text-left">
+          <h2 className="text-lg font-bold text-purple-600 mb-3">🦊 Tu copiloto digital</h2>
+          <p className="text-gray-600 mb-2">¡Hola! Soy tu copiloto digital.</p>
+          <p className="text-gray-600 mb-2">Te acompaño mientras exploras internet y las apps que más usas.</p>
+          <p className="text-gray-600 mb-2">Aquí aprenderás a reconocer trucos, entender cómo funcionan las plataformas y tomar buenas decisiones cuando estés online. 🛡️</p>
+          <p className="text-gray-600 mb-2">Exploraremos YouTube, TikTok, Roblox e Instagram con retos sencillos.</p>
+          <p className="text-gray-600 mb-4">Cada paso te ayudará a mejorar tus habilidades digitales.</p>
+          <p className="text-purple-600 font-bold">¿Empezamos? Primero, elige cómo quieres que te llame.</p>
+        </div>
 
         <div className="mb-8">
           <h2 className="text-lg font-bold text-gray-700 mb-4">Elige tu avatar</h2>
