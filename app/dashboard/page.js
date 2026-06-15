@@ -49,10 +49,21 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <p className="font-medium text-gray-700">{hijo.nombre}</p>
-                        <p className="text-sm text-gray-500">
-                          {hijo.edad} años
-                          {hijo.plataformas.length > 0 ? ` · ${hijo.plataformas.join(", ")}` : ""}
-                        </p>
+                        <p className="text-sm text-gray-500">{hijo.edad} años</p>
+                        {hijo.plataformas.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {hijo.plataformas.map(p => {
+                              const ruta = { Roblox: "/guia/roblox" }[p]
+                              return ruta ? (
+                                <a key={p} href={ruta} className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full hover:bg-blue-200">
+                                  {p} →
+                                </a>
+                              ) : (
+                                <span key={p} className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{p}</span>
+                              )
+                            })}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
