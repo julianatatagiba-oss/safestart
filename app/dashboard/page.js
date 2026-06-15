@@ -13,7 +13,12 @@ export default function Dashboard() {
     <main className="min-h-screen bg-blue-50">
       <nav className="bg-white shadow-sm p-4 flex justify-between items-center mb-6">
         <span className="text-blue-600 font-bold text-lg">🌐 SafeStart</span>
-        <a href="/" className="text-gray-500 text-sm hover:text-blue-600">Cerrar sesión</a>
+        <button
+          onClick={() => { localStorage.clear(); window.location.href = "/" }}
+          className="text-gray-500 text-sm hover:text-blue-600"
+        >
+          Cerrar sesión
+        </button>
       </nav>
       <div className="max-w-2xl mx-auto p-8">
         <h1 className="text-3xl font-bold text-blue-600 mb-2">Bienvenido 👋</h1>
