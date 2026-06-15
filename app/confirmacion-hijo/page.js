@@ -3,11 +3,20 @@ import { useEffect, useState } from "react"
 
 export default function ConfirmacionHijo() {
   const [nombre, setNombre] = useState("")
+  const [copiado, setCopiado] = useState(false)
 
   useEffect(() => {
     const n = localStorage.getItem("ultimoHijo")
     if (n) setNombre(n)
   }, [])
+
+  function copiarLink() {
+    const url = `${window.location.origin}/bienvenida-hijo`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiado(true)
+      setTimeout(() => setCopiado(false), 2000)
+    })
+  }
 
   return (
     <main className="min-h-screen bg-blue-50 flex flex-col items-center justify-center p-8">
@@ -17,15 +26,22 @@ export default function ConfirmacionHijo() {
         <h1 className="text-2xl font-bold text-blue-600 mb-2">
           {nombre ? `¡${nombre} está listo!` : "¡Perfil creado!"}
         </h1>
-        <p className="text-gray-500 mb-8">Comparte este enlace con tu hijo para que acceda a su perfil</p>
+        <p className="text-gray-500 mb-8">
+          Comparte este enlace con tu hijo para que acceda a su perfil
+        </p>
 
         <div className="bg-blue-50 rounded-xl p-4 mb-6">
           <p className="text-sm text-gray-500 mb-2">Enlace de acceso</p>
-          <p className="text-blue-600 font-medium break-all">safestart.vercel.app/bienvenida-hijo</p>
+          <p className="text-blue-600 font-medium break-all text-sm">
+            {typeof window !== "undefined" ? `${window.location.origin}/bienvenida-hijo` : "safestart.vercel.app/bienvenida-hijo"}
+          </p>
         </div>
 
-        <button className="w-full bg-blue-600 text-white py-3 rounded-xl text-lg hover:bg-blue-700 mb-4">
-          📋 Copiar enlace
+        <button
+          onClick={copiarLink}
+          className="w-full bg-blue-600 text-white py-3 rounded-xl text-lg hover:bg-blue-700 mb-4 transition-all"
+        >
+          {copiado ? "¡Copiado! ✅" : "📋 Copiar enlace"}
         </button>
 
         <div className="flex gap-3">

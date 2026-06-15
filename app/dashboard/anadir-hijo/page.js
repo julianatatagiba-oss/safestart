@@ -22,6 +22,7 @@ export default function AnadirHijo() {
     saved.push({ nombre: nombre.trim(), edad, plataformas })
     localStorage.setItem("hijos", JSON.stringify(saved))
     localStorage.setItem("ultimoHijo", nombre.trim())
+    localStorage.setItem("ultimasPlataformas", JSON.stringify(plataformas))
     router.push("/confirmacion-hijo")
   }
 

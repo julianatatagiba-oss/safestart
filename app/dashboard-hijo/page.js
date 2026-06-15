@@ -10,10 +10,16 @@ const PLATAFORMAS = [
 
 export default function DashboardHijo() {
   const [completados, setCompletados] = useState({})
+  const [nombre, setNombre] = useState("Tú")
+  const [avatar, setAvatar] = useState("🦊")
 
   useEffect(() => {
     const saved = localStorage.getItem("retosCompletados")
     if (saved) setCompletados(JSON.parse(saved))
+    const n = localStorage.getItem("ultimoHijo")
+    if (n) setNombre(n)
+    const a = localStorage.getItem("hijoAvatar")
+    if (a) setAvatar(a)
   }, [])
 
   const totalInsignias = Object.keys(completados).length
@@ -25,9 +31,9 @@ export default function DashboardHijo() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="text-4xl">🦊</div>
+            <div className="text-4xl">{avatar}</div>
             <div>
-              <h1 className="text-xl font-bold text-purple-600">¡Hola, Mateo!</h1>
+              <h1 className="text-xl font-bold text-purple-600">¡Hola, {nombre}!</h1>
               <p className="text-gray-400 text-sm">Nivel 1 · {totalInsignias} insignia{totalInsignias !== 1 ? "s" : ""}</p>
             </div>
           </div>
