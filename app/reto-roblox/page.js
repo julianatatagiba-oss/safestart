@@ -80,7 +80,8 @@ export default function RetoRoblox() {
       setEstado(ESTADOS.PREGUNTA)
     } else {
       const saved = JSON.parse(localStorage.getItem("retosCompletados") || "{}")
-      saved.roblox = true
+      const finalAciertos = aciertos + (ESCENARIOS[indice].opciones[seleccion].correcto ? 1 : 0)
+      saved.roblox = { completado: true, aciertos: finalAciertos, total: ESCENARIOS.length }
       localStorage.setItem("retosCompletados", JSON.stringify(saved))
       setEstado(ESTADOS.INSIGNIA)
     }
