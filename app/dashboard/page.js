@@ -3,11 +3,20 @@ import { useEffect, useState } from "react"
 
 export default function Dashboard() {
   const [hijos, setHijos] = useState([])
+  const [copiado, setCopiado] = useState(null)
 
   useEffect(() => {
     const saved = localStorage.getItem("hijos")
     if (saved) setHijos(JSON.parse(saved))
   }, [])
+
+  function copiarEnlace(nombre) {
+    const url = `${window.location.origin}/bienvenida-hijo`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiado(nombre)
+      setTimeout(() => setCopiado(null), 2000)
+    })
+  }
 
   return (
     <main className="min-h-screen bg-blue-50">
@@ -32,16 +41,31 @@ export default function Dashboard() {
           ) : (
             <div className="mb-4 space-y-3">
               {hijos.map((hijo, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 font-bold">
-                    {hijo.nombre[0].toUpperCase()}
+                <div key={i} className="p-4 bg-blue-50 rounded-xl">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 font-bold">
+                        {hijo.nombre[0].toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-700">{hijo.nombre}</p>
+                        <p className="text-sm text-gray-500">
+                          {hijo.edad} años
+                          {hijo.plataformas.length > 0 ? ` · ${hijo.plataformas.join(", ")}` : ""}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-700">{hijo.nombre}</p>
-                    <p className="text-sm text-gray-500">
-                      {hijo.edad} años
-                      {hijo.plataformas.length > 0 ? ` · ${hijo.plataformas.join(", ")}` : ""}
-                    </p>
+                  <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-2">
+                    <span className="text-xs text-gray-400 flex-1 truncate">
+                      {typeof window !== "undefined" ? `${window.location.origin}/bienvenida-hijo` : "safestart.vercel.app/bienvenida-hijo"}
+                    </span>
+                    <button
+                      onClick={() => copiarEnlace(hijo.nombre)}
+                      className="text-xs font-semibold text-blue-600 hover:text-blue-800 whitespace-nowrap"
+                    >
+                      {copiado === hijo.nombre ? "¡Copiado! ✅" : "📋 Copiar enlace"}
+                    </button>
                   </div>
                 </div>
               ))}
