@@ -56,7 +56,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-2 mb-2">
                     <span className="text-xs text-gray-400 flex-1 truncate">
                       {typeof window !== "undefined" ? `${window.location.origin}/bienvenida-hijo` : "safestart.vercel.app/bienvenida-hijo"}
                     </span>
@@ -67,6 +67,12 @@ export default function Dashboard() {
                       {copiado === hijo.nombre ? "¡Copiado! ✅" : "📋 Copiar enlace"}
                     </button>
                   </div>
+                  <a
+                    href="/dashboard/progreso-hijo"
+                    className="block text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Ver progreso →
+                  </a>
                 </div>
               ))}
             </div>
