@@ -227,15 +227,26 @@ export default function RetoRoblox() {
               <p className="text-white text-sm leading-relaxed">{escenario.feedback}</p>
             </div>
 
-            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-5">
-              <p className="text-xs font-bold text-yellow-600 uppercase tracking-wide mb-2">
-                🔓 Dato desbloqueado
-              </p>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                <span className="text-xl mr-2">{escenario.tip.icono}</span>
-                {escenario.tip.texto}
-              </p>
-            </div>
+            {ESCENARIOS[indice].opciones[seleccion].correcto ? (
+              <div className="bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-5">
+                <p className="text-xs font-bold text-yellow-600 uppercase tracking-wide mb-2">
+                  🔓 Dato desbloqueado
+                </p>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  <span className="text-xl mr-2">{escenario.tip.icono}</span>
+                  {escenario.tip.texto}
+                </p>
+              </div>
+            ) : (
+              <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-5">
+                <p className="text-xs font-bold text-purple-500 uppercase tracking-wide mb-2">
+                  💪 ¡Sigue intentándolo!
+                </p>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  Cada reto que completes te acerca más a desbloquear curiosidades e insignias. ¡Tú puedes!
+                </p>
+              </div>
+            )}
 
             <button
               onClick={siguiente}
