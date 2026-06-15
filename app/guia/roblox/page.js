@@ -1,218 +1,161 @@
 "use client"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { ArrowLeft, ChevronDown, AlertTriangle, Settings, CreditCard, Newspaper, ShieldCheck } from "lucide-react"
 
-const RIESGOS = [
+const SECTIONS = [
   {
-    icono: "🎙️",
-    titulo: "Chat de voz con desconocidos",
-    descripcion: "Es el riesgo más inmediato. Las conversaciones de voz son más personales y difíciles de moderar que el chat de texto.",
+    id: "risks",
+    icon: AlertTriangle,
+    iconColor: "text-amber-600 bg-amber-100",
+    title: "Riesgos principales",
+    content: [
+      { subtitle: "Contacto con desconocidos", text: "En Roblox, los jugadores pueden enviar solicitudes de amistad y mensajes privados. Los menores pueden ser contactados por adultos que se hacen pasar por niños." },
+      { subtitle: "Contenido inapropiado", text: "Aunque Roblox tiene filtros, algunos juegos creados por usuarios pueden contener violencia, lenguaje inapropiado o referencias adultas." },
+      { subtitle: "Adicción al juego", text: "El sistema de recompensas de Roblox está diseñado para mantener a los jugadores en la plataforma. Es importante establecer límites de tiempo claros." },
+    ],
   },
   {
-    icono: "🎭",
-    titulo: "Contenido inapropiado disfrazado",
-    descripcion: "Hay experiencias con contenido violento o sexual diseñadas para parecer juegos inofensivos.",
+    id: "config",
+    icon: Settings,
+    iconColor: "text-blue-600 bg-blue-100",
+    title: "Configuración recomendada",
+    content: [
+      { subtitle: "Cuenta restringida", text: "Activa el modo de cuenta restringida en Ajustes > Privacidad > Restricciones de cuenta. Limita el acceso solo a juegos curados." },
+      { subtitle: "Mensajes privados", text: "Ve a Configuración > Privacidad > ¿Quién puede enviarme mensajes? y selecciona 'Nadie' o 'Amigos'." },
+      { subtitle: "PIN parental", text: "Configura un PIN en Ajustes > Seguridad para que no puedan cambiar la configuración de privacidad sin tu permiso." },
+    ],
   },
   {
-    icono: "💸",
-    titulo: "Compras con Robux",
-    descripcion: "Mecánicas de monetización agresivas. Los niños pueden gastar dinero real sin ser conscientes del valor.",
+    id: "purchases",
+    icon: CreditCard,
+    iconColor: "text-green-600 bg-green-100",
+    title: "Compras dentro de la app",
+    content: [
+      { subtitle: "¿Qué es Robux?", text: "Robux es la moneda virtual de Roblox. Se compra con dinero real y se usa para comprar accesorios, avatares y ventajas en juegos." },
+      { subtitle: "Cómo controlarlo", text: "Activa la verificación de contraseña en Ajustes > Seguridad. También puedes desactivar la tarjeta de crédito guardada." },
+      { subtitle: "Límites mensuales", text: "Considera establecer un límite mensual de Robux como propina digital, explicando que es un presupuesto fijo." },
+    ],
   },
   {
-    icono: "👤",
-    titulo: "Solicitudes de desconocidos",
-    descripcion: "Adultos que usan Roblox para contactar menores y ganarse su confianza progresivamente (grooming).",
+    id: "news",
+    icon: Newspaper,
+    iconColor: "text-purple-600 bg-purple-100",
+    title: "Noticias recientes",
+    content: [
+      { subtitle: "Nueva política de edad (2025)", text: "Roblox lanzó verificación de edad para acceder a contenido para mayores de 17 años. Los menores están automáticamente excluidos con filtros más estrictos." },
+      { subtitle: "Actualizaciones de seguridad", text: "El sistema de moderación incorporó IA en tiempo real para detectar y bloquear contenido inapropiado en chats y juegos con mayor precisión." },
+    ],
+  },
+  {
+    id: "conversation",
+    icon: ShieldCheck,
+    iconColor: "text-emerald-600 bg-emerald-100",
+    title: "Cómo hablar con tu hijo",
+    content: [
+      { subtitle: "Preguntas para empezar", text: "¿A qué juegos juegas más? ¿Hay alguien que te haya pedido información personal? ¿Cómo te sentiste cuando...?" },
+      { subtitle: "Sin dramatizar", text: "No prohibas de golpe — explica los riesgos con ejemplos concretos. La prohibición genera ocultamiento; la conversación genera criterio." },
+    ],
   },
 ]
-
-const CONFIGURACION = [
-  {
-    paso: 1,
-    accion: "Vincula tu cuenta de padre",
-    detalle: "Sin vincular, tu hijo puede cambiar su propia configuración de seguridad en cualquier momento.",
-    critico: true,
-  },
-  {
-    paso: 2,
-    accion: "Activa las restricciones de cuenta",
-    detalle: "Configuración → Seguridad → Restricciones de cuenta. Limita el chat a lista de amigos aprobados.",
-    critico: true,
-  },
-  {
-    paso: 3,
-    accion: "Desactiva el chat de voz",
-    detalle: "Imprescindible para menores de 12. Configuración → Privacidad → Chat de voz → Desactivar.",
-    critico: true,
-  },
-  {
-    paso: 4,
-    accion: "Configura el chat solo para amigos",
-    detalle: "Para menores de 10, desactívalo completamente. Para 10-12, solo amigos verificados.",
-    critico: false,
-  },
-  {
-    paso: 5,
-    accion: "Bloquea las compras integradas",
-    detalle: "Desactiva la opción de comprar Robux desde el perfil del hijo o añade PIN parental en la tienda.",
-    critico: false,
-  },
-  {
-    paso: 6,
-    accion: "Revisa la sección 'Recientes' cada semana",
-    detalle: "Muestra en qué mundos ha estado tu hijo. Es la forma más rápida de detectar experiencias inapropiadas.",
-    critico: false,
-  },
-]
-
-const NOTICIAS = [
-  {
-    titulo: "INCIBE alerta sobre riesgos de grooming en plataformas de gaming para menores",
-    fuente: "INCIBE",
-    fecha: "Mayo 2026",
-    url: "https://www.incibe.es/menores",
-  },
-  {
-    titulo: "Roblox implementa verificación biométrica de edad para adaptar la configuración automáticamente",
-    fuente: "Roblox Blog",
-    fecha: "Enero 2026",
-    url: "https://blog.roblox.com",
-  },
-  {
-    titulo: "Qustodio 2025: los niños pasan una media de 2h17min diarios en Roblox desde escritorio",
-    fuente: "Qustodio",
-    fecha: "Diciembre 2025",
-    url: "https://www.qustodio.com",
-  },
-]
-
-function Seccion({ titulo, children, defaultOpen = false }) {
-  const [abierto, setAbierto] = useState(defaultOpen)
-  return (
-    <div className="bg-white rounded-2xl shadow-sm mb-4 overflow-hidden">
-      <button
-        onClick={() => setAbierto(!abierto)}
-        className="w-full flex items-center justify-between p-5 text-left"
-      >
-        <span className="font-bold text-gray-700">{titulo}</span>
-        <span className="text-gray-400 text-lg">{abierto ? "▲" : "▼"}</span>
-      </button>
-      {abierto && <div className="px-5 pb-5">{children}</div>}
-    </div>
-  )
-}
 
 export default function GuiaRoblox() {
+  const router = useRouter()
+  const [openSection, setOpenSection] = useState("risks")
+
   return (
-    <main className="min-h-screen bg-blue-50 p-6">
-      <div className="max-w-2xl mx-auto">
-
-        <a href="/dashboard" className="text-blue-600 hover:underline mb-6 inline-block">
-          ← Volver al dashboard
-        </a>
-
-        {/* Header */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <div className="flex items-center gap-4 mb-3">
-            <span className="text-5xl">🎮</span>
+    <div className="min-h-screen bg-[#EFF6FF] font-[Inter,sans-serif]">
+      <header className="bg-white border-b border-blue-100 sticky top-0 z-40">
+        <div className="max-w-2xl mx-auto px-4 h-16 flex items-center gap-3">
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
+          >
+            <ArrowLeft size={16} />
+          </button>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
+              <span className="text-red-600 font-black text-sm">R</span>
+            </div>
             <div>
-              <h1 className="text-2xl font-black text-gray-800">Roblox</h1>
-              <p className="text-gray-500 text-sm">Guía de seguridad para padres</p>
-            </div>
-          </div>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            Plataforma de juegos y creación muy popular entre niños de 6 a 12 años.
-            Los usuarios juegan experiencias creadas por otros jugadores o crean las suyas propias.
-          </p>
-          <div className="flex gap-4 mt-4">
-            <div className="flex-1 bg-red-50 rounded-xl p-3 text-center">
-              <p className="text-xl font-black text-red-500">70M+</p>
-              <p className="text-xs text-gray-400">usuarios activos diarios</p>
-            </div>
-            <div className="flex-1 bg-orange-50 rounded-xl p-3 text-center">
-              <p className="text-xl font-black text-orange-500">6-12</p>
-              <p className="text-xs text-gray-400">años de uso habitual</p>
-            </div>
-            <div className="flex-1 bg-yellow-50 rounded-xl p-3 text-center">
-              <p className="text-xl font-black text-yellow-600">2h17m</p>
-              <p className="text-xs text-gray-400">al día en escritorio</p>
+              <h1 className="font-black text-gray-900 leading-tight">Guía Roblox</h1>
+              <p className="text-xs text-gray-400">Para padres · Actualizada jun 2026</p>
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Riesgos */}
-        <Seccion titulo="⚠️ Riesgos principales" defaultOpen={true}>
-          <div className="space-y-3">
-            {RIESGOS.map((r, i) => (
-              <div key={i} className="flex gap-3 p-3 bg-red-50 rounded-xl">
-                <span className="text-2xl shrink-0">{r.icono}</span>
-                <div>
-                  <p className="font-semibold text-gray-700 text-sm">{r.titulo}</p>
-                  <p className="text-gray-500 text-sm mt-1">{r.descripcion}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Seccion>
-
-        {/* Configuración */}
-        <Seccion titulo="⚙️ Configuración de seguridad">
-          <div className="space-y-3">
-            {CONFIGURACION.map((c) => (
-              <div key={c.paso} className={`flex gap-3 p-3 rounded-xl ${c.critico ? "bg-blue-50 border border-blue-200" : "bg-gray-50"}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 mt-0.5 ${c.critico ? "bg-blue-600 text-white" : "bg-gray-300 text-gray-600"}`}>
-                  {c.paso}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-700 text-sm">
-                    {c.accion}
-                    {c.critico && <span className="ml-2 text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Prioritario</span>}
-                  </p>
-                  <p className="text-gray-500 text-sm mt-1">{c.detalle}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Seccion>
-
-        {/* Compras */}
-        <Seccion titulo="💳 Compras integradas">
-          <div className="space-y-3 text-sm text-gray-600">
-            <div className="flex gap-2 p-3 bg-yellow-50 rounded-xl">
-              <span className="shrink-0">💰</span>
-              <p><strong>Robux</strong> es la moneda virtual de Roblox. Se compra con dinero real y se usa para acceder a objetos, avatares y experiencias de pago.</p>
+      <main className="max-w-2xl mx-auto px-4 py-8">
+        {/* Intro card */}
+        <div className="bg-white rounded-2xl shadow-sm shadow-blue-100 border border-blue-50 p-5 mb-6">
+          <div className="flex items-start gap-3">
+            <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-600 font-black text-xl flex-shrink-0">
+              R
             </div>
-            <div className="flex gap-2 p-3 bg-yellow-50 rounded-xl">
-              <span className="shrink-0">🛒</span>
-              <p>Los niños pueden hacer compras desde el juego si la cuenta tiene saldo o un método de pago guardado. <strong>Desactiva esto desde la configuración de tu cuenta.</strong></p>
-            </div>
-            <div className="flex gap-2 p-3 bg-yellow-50 rounded-xl">
-              <span className="shrink-0">🔒</span>
-              <p>Puedes añadir un <strong>PIN parental</strong> para que cualquier compra requiera tu autorización.</p>
+            <div>
+              <div className="font-bold text-gray-900 mb-1">¿Qué es Roblox?</div>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                Plataforma de creación de juegos usada principalmente por menores de 16 años.
+                Permite crear, compartir y jugar mundos virtuales. Es gratuita pero incluye
+                compras en la aplicación.
+              </p>
             </div>
           </div>
-        </Seccion>
+          <div className="flex gap-2 mt-4">
+            <span className="bg-amber-100 text-amber-700 text-xs font-semibold px-2.5 py-1 rounded-lg">7–16 años</span>
+            <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-lg">Social</span>
+            <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-lg">Compras</span>
+          </div>
+        </div>
 
-        {/* Noticias */}
-        <Seccion titulo="📰 Noticias recientes">
-          <div className="space-y-3">
-            {NOTICIAS.map((n, i) => (
-              <a
-                key={i}
-                href={n.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+        {/* Accordion sections */}
+        <div className="space-y-3">
+          {SECTIONS.map(({ id, icon: Icon, iconColor, title, content }) => (
+            <div key={id} className="bg-white rounded-2xl shadow-sm shadow-blue-100 border border-blue-50 overflow-hidden">
+              <button
+                onClick={() => setOpenSection(openSection === id ? null : id)}
+                className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors"
               >
-                <p className="font-medium text-gray-700 text-sm mb-1">{n.titulo}</p>
-                <p className="text-xs text-gray-400">{n.fuente} · {n.fecha}</p>
-              </a>
-            ))}
-          </div>
-          <p className="text-xs text-gray-400 mt-3 text-center">
-            Más recursos en <a href="https://www.incibe.es/menores" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">incibe.es/menores</a>
-          </p>
-        </Seccion>
+                <div className="flex items-center gap-3">
+                  <div className={`w-9 h-9 rounded-xl ${iconColor} flex items-center justify-center`}>
+                    <Icon size={17} />
+                  </div>
+                  <span className="font-bold text-gray-900">{title}</span>
+                </div>
+                <ChevronDown
+                  size={18}
+                  className={`text-gray-400 transition-transform ${openSection === id ? "rotate-180" : ""}`}
+                />
+              </button>
 
-      </div>
-    </main>
+              {openSection === id && (
+                <div className="px-5 pb-5 border-t border-gray-50">
+                  <div className="space-y-4 pt-4">
+                    {content.map(({ subtitle, text }) => (
+                      <div key={subtitle}>
+                        <div className="font-semibold text-gray-800 text-sm mb-1">{subtitle}</div>
+                        <p className="text-sm text-gray-500 leading-relaxed">{text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="mt-8 bg-[#EDE9FE] rounded-2xl p-5 text-center">
+          <div className="font-bold text-[#7C3AED] mb-1">¿Tu hijo ya completó el reto de Roblox?</div>
+          <p className="text-sm text-purple-600 mb-4">Puede ganar el logro "Roblox Pro" completando 3 escenarios</p>
+          <button
+            onClick={() => router.push("/dashboard-hijo")}
+            className="bg-[#7C3AED] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#6d28d9] transition-colors text-sm"
+          >
+            Ver panel del hijo/a
+          </button>
+        </div>
+      </main>
+    </div>
   )
 }
