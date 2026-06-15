@@ -40,7 +40,7 @@ export default function BienvenidaHijo() {
           <p className="text-gray-600 mb-2">Aquí aprenderás a reconocer trucos, entender cómo funcionan las plataformas y tomar buenas decisiones cuando estés online. 🛡️</p>
           <p className="text-gray-600 mb-2">Exploraremos YouTube, TikTok, Roblox e Instagram con retos sencillos.</p>
           <p className="text-gray-600 mb-4">Cada paso te ayudará a mejorar tus habilidades digitales.</p>
-          <p className="text-purple-600 font-bold">¿Empezamos? Primero, elige cómo quieres que te llame.</p>
+          <p className="text-purple-600 font-bold">¿Empezamos? Primero, selecciona tu avatar.</p>
         </div>
 
         <div className="mb-8">

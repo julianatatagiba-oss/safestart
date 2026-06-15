@@ -1,17 +1,20 @@
 "use client"
 import { useEffect, useState } from "react"
 
-const PLATAFORMAS = [
+const CATALOGO = [
   { nombre: "Roblox", emoji: "🎮", ruta: "/reto-roblox", disponible: true },
   { nombre: "YouTube", emoji: "📺", ruta: null, disponible: false },
   { nombre: "TikTok", emoji: "🎵", ruta: null, disponible: false },
   { nombre: "Instagram", emoji: "📸", ruta: null, disponible: false },
+  { nombre: "Minecraft", emoji: "⛏️", ruta: null, disponible: false },
+  { nombre: "WhatsApp", emoji: "💬", ruta: null, disponible: false },
 ]
 
 export default function DashboardHijo() {
   const [completados, setCompletados] = useState({})
   const [nombre, setNombre] = useState("Tú")
   const [avatar, setAvatar] = useState("🦊")
+  const [plataformas, setPlataformas] = useState([])
 
   useEffect(() => {
     const saved = localStorage.getItem("retosCompletados")
@@ -20,7 +23,13 @@ export default function DashboardHijo() {
     if (n) setNombre(n)
     const a = localStorage.getItem("hijoAvatar")
     if (a) setAvatar(a)
+    const p = localStorage.getItem("ultimasPlataformas")
+    if (p) setPlataformas(JSON.parse(p))
   }, [])
+
+  const plataformasVisibles = plataformas.length > 0
+    ? CATALOGO.filter(p => plataformas.includes(p.nombre))
+    : CATALOGO
 
   const totalInsignias = Object.keys(completados).length
 
@@ -37,8 +46,16 @@ export default function DashboardHijo() {
               <p className="text-gray-400 text-sm">Nivel 1 · {totalInsignias} insignia{totalInsignias !== 1 ? "s" : ""}</p>
             </div>
           </div>
-          <div className="bg-purple-600 text-white text-sm px-3 py-1 rounded-full">
-            {totalInsignias * 100} pts
+          <div className="flex items-center gap-2">
+            <div className="bg-purple-600 text-white text-sm px-3 py-1 rounded-full">
+              {totalInsignias * 100} pts
+            </div>
+            <button
+              onClick={() => { localStorage.clear(); window.location.href = "/" }}
+              className="text-gray-400 text-xs hover:text-gray-600"
+            >
+              Salir
+            </button>
           </div>
         </div>
 
@@ -49,7 +66,7 @@ export default function DashboardHijo() {
             <p className="text-gray-400 text-sm">Completa un reto para ganar tu primera insignia</p>
           ) : null}
           <div className="flex gap-2 mt-3">
-            {PLATAFORMAS.map((p) => (
+            {plataformasVisibles.map((p) => (
               <div
                 key={p.nombre}
                 className={`flex-1 text-center rounded-xl p-3 ${completados[p.nombre.toLowerCase()] ? "bg-yellow-50 border-2 border-yellow-300" : "bg-gray-50"}`}
@@ -65,7 +82,7 @@ export default function DashboardHijo() {
         <div className="bg-white rounded-2xl shadow-sm p-5">
           <h2 className="font-bold text-gray-700 mb-4">¿Por dónde empezamos?</h2>
           <div className="space-y-3">
-            {PLATAFORMAS.map((p) => {
+            {plataformasVisibles.map((p) => {
               const completado = completados[p.nombre.toLowerCase()]
               return (
                 <div key={p.nombre} className="flex items-center justify-between py-2">
